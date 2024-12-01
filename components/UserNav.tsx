@@ -29,8 +29,9 @@ async function UserNav() {
           <MenuIcon className="w-6 h-6 lg:w-5 lg:h-5" />
           <img
             src={
-              user?.picture ??
-              "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
+              user?.picture && !user.picture.includes("d=blank")
+                ? user.picture
+                : "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
             }
             alt="Image of user"
             className="rounded-full w-8 h-8 hidden lg:block"
