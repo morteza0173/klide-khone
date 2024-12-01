@@ -73,7 +73,7 @@ export default async function HomeRoute({
 
   return (
     <div className="w-[90%]  mx-auto mt-10 mb-12">
-      <h1 className="text-2xl font-bold mb-5">{data?.title}</h1>
+      <h1 className="text-lg lg:text-2xl font-bold mb-5">{data?.title}</h1>
       <div className="relative h-[550px]">
         <Image
           alt={data?.title as string}

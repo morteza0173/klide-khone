@@ -12,8 +12,8 @@ function AddressRoute({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <div className="w-3/5 mx-auto">
-        <h2 className="text-3xl font-semibold transition-colors mb-10">
+      <div className="w-[90%] lg:w-3/5 mx-auto">
+        <h2 className="text-lg md:text-2xl lg:text-3xl font-semibold transition-colors mb-10">
           محل خانه ی خود را انتخاب کنید
         </h2>
       </div>
@@ -21,7 +21,7 @@ function AddressRoute({ params }: { params: { id: string } }) {
       <form action={createLocation}>
         <input type="hidden" name="homeId" value={params.id} />
 
-        <div className="w-3/5 mx-auto mb-36">
+        <div className="w-[90%] lg:w-3/5 mx-auto mb-36">
           <Map />
         </div>
         <CreationButtonBar />
