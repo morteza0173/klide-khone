@@ -107,8 +107,10 @@ export default async function HomeRoute({
           <div className="flex items-center mt-6">
             <img
               src={
-                user?.picture && !user.picture.includes("d=blank")
-                  ? user.picture
+                data?.User?.profileImage &&
+                typeof data.User.profileImage === "string" &&
+                !data.User.profileImage.includes("d=blank")
+                  ? data.User.profileImage
                   : "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
               }
               alt="user host"
