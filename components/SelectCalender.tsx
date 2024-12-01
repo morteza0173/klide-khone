@@ -90,7 +90,7 @@ export default function SelectCalender({
   }
 
   return (
-    <div>
+    <div className="flex items-center justify-center">
       <input type="hidden" name="startDate" value={startDate as string} />
       <input type="hidden" name="endDate" value={endDate as string} />
       <Calendar

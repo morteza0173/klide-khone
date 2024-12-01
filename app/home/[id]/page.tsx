@@ -72,7 +72,7 @@ export default async function HomeRoute({
   const user = await getUser();
 
   return (
-    <div className="w-[75%] mx-auto mt-10 mb-12">
+    <div className="w-[90%]  mx-auto mt-10 mb-12">
       <h1 className="text-2xl font-bold mb-5">{data?.title}</h1>
       <div className="relative h-[550px]">
         <Image
@@ -82,8 +82,8 @@ export default async function HomeRoute({
           className="object-cover rounded-lg w-full h-full"
         />
       </div>
-      <div className="flex justify-between gap-x-24 mt-8">
-        <div className="w-2/3">
+      <div className="flex justify-between gap-x-24 mt-8 flex-col-reverse lg:flex-row">
+        <div className="w-full lg:w-[90%]">
           <div className="flex gap-x-4">
             <MapPinHouse className="w-6 h-6" />
             <h3 className="text-xl font-medium ">
@@ -91,7 +91,7 @@ export default async function HomeRoute({
             </h3>
           </div>
 
-          <div className="flex gap-x-4 text-muted-foreground">
+          <div className="flex gap-x-4 text-muted-foreground flex-wrap justify-between">
             <div className="flex items-center">
               <User /> <p>تعداد مهمان ها : {data?.guests}</p>
             </div>
@@ -134,7 +134,7 @@ export default async function HomeRoute({
           </div>
           <Map position={position as positionType} />
         </div>
-        <form action={createReservation}>
+        <form action={createReservation} className="mb-10">
           <input type="hidden" name="homeId" value={params.id} />
           <input type="hidden" name="userId" value={user?.id} />
           <SelectCalender resevation={data?.Reservation} />
