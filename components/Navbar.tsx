@@ -3,6 +3,7 @@ import Link from "next/link";
 import desctopLogo from "../public/key-svgrepo-com.svg";
 import mobileLogo from "../public/key-svgrepo-com.svg";
 import UserNav from "./UserNav";
+import SearchComponent from "./SearchComponent";
 
 function Navbar() {
   return (
@@ -23,9 +24,9 @@ function Navbar() {
             priority
           />
         </Link>
-        <div className="rounded-full border px-5 py-2">
-          <h1>سرچ سایت اینجا قرار میگیرد</h1>
-        </div>
+
+        <SearchComponent />
+
         <UserNav />
       </div>
     </nav>
