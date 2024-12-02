@@ -42,7 +42,7 @@ function MapSearchComponent({ data }: { data: dataType[] }) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {data.map((item) => {
+      {data?.map((item) => {
         const lng = item.lng as number;
         const lat = item.lat as number;
         const position = { lng, lat };

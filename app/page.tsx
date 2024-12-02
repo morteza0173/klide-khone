@@ -5,6 +5,7 @@ import SkeletonCard from "@/components/SkeletonCard";
 import { Button } from "@/components/ui/button";
 import prisma from "@/lib/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { FilterX } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -50,8 +51,15 @@ export default function Home({
           <MapFilterItems />
         </div>
         <div className="col-span-2 flex items-center justify-center">
-          <Button asChild>
-            <Link href="/">نمایش همه</Link>
+          <Button asChild className="hidden lg:block" variant="outline">
+            <Link href="/" className="text-xs">
+              نمایش همه
+            </Link>
+          </Button>
+          <Button asChild className="lg:hidden" variant="outline" size="icon">
+            <Link href="/" className="text-xs">
+              <FilterX className="w-4 h-4" />
+            </Link>
           </Button>
         </div>
       </div>
