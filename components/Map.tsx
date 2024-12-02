@@ -9,6 +9,7 @@ import {
   TileLayer,
   useMapEvents,
 } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 import { Button } from "./ui/button";
 import axios from "axios";
 
