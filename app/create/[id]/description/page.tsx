@@ -43,6 +43,7 @@ function DescriptionPage({ params }: { params: { id: string } }) {
               type="number"
               placeholder="قیمت به ازای هر شب به تومان"
               min={50000}
+              step={5000}
             />
           </div>
           <div className="flex flex-col gap-y-2">

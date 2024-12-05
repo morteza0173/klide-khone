@@ -8,17 +8,28 @@ import SelectCalender from "@/components/SelectCalender";
 import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { createReservation } from "@/app/action";
-import { ResevetionSubmiteButton } from "@/components/SubmiteButton";
+import {
+  addToFavorite,
+  createReservation,
+  deleteFromFavorite,
+} from "@/app/action";
+import {
+  AddToFavoriteButton,
+  DeleteFromFavoriteButton,
+} from "@/components/SubmiteButton";
 
 interface positionType {
   lng: number;
   lat: number;
 }
 
-async function getData(homeId: string) {
+async function getData({
+  homeId,
+  userId,
+}: {
+  homeId: string;
+  userId?: string;
+}) {
   const data = await prisma.home.findUnique({
     where: {
       id: homeId,
@@ -48,6 +59,11 @@ async function getData(homeId: string) {
           firstName: true,
         },
       },
+      favorite: userId
+        ? {
+            where: { userId: userId, homeId: homeId },
+          }
+        : false,
     },
   });
   return data;
@@ -62,18 +78,52 @@ export default async function HomeRoute({
     ssr: false,
     loading: () => <Skeleton className="h-[50vh] w-full" />,
   });
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
 
-  const data = await getData(params.id);
+  const data = await getData({ homeId: params.id, userId: user.id });
   const latNumber = data?.lat;
   const lngNumber = data?.lng;
   const position = { lng: lngNumber, lat: latNumber };
 
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-
   return (
     <div className="w-[90%]  mx-auto mt-10 mb-12">
-      <h1 className="text-lg lg:text-2xl font-bold mb-5">{data?.title}</h1>
+      <div className="flex gap-x-4 justify-between">
+        <h1 className="text-lg lg:text-2xl font-bold mb-5">{data?.title}</h1>
+        <div>
+          {user.id && (
+            <div>
+              {data?.favorite && data.favorite.length > 0 ? (
+                <form action={deleteFromFavorite}>
+                  <input
+                    type="hidden"
+                    name="favoriteId"
+                    value={data?.favorite[0]?.id}
+                  />
+                  <input type="hidden" name="userId" value={user.id} />
+                  <input
+                    type="hidden"
+                    name="pathName"
+                    value={`/home/${params.id}`}
+                  />
+                  <DeleteFromFavoriteButton />
+                </form>
+              ) : (
+                <form action={addToFavorite}>
+                  <input type="hidden" name="homeId" value={params.id} />
+                  <input type="hidden" name="userId" value={user.id} />
+                  <input
+                    type="hidden"
+                    name="pathName"
+                    value={`/home/${params.id}`}
+                  />
+                  <AddToFavoriteButton />
+                </form>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
       <div className="relative h-[550px]">
         <Image
           alt={data?.title as string}
@@ -91,7 +141,7 @@ export default async function HomeRoute({
             </h3>
           </div>
 
-          <div className="flex gap-x-4 text-muted-foreground flex-wrap justify-between">
+          <div className="flex gap-x-4 gap-y-2 text-muted-foreground flex-wrap justify-between mt-2">
             <div className="flex items-center">
               <User /> <p>تعداد مهمان ها : {data?.guests}</p>
             </div>
@@ -139,16 +189,14 @@ export default async function HomeRoute({
         <form action={createReservation} className="mb-10">
           <input type="hidden" name="homeId" value={params.id} />
           <input type="hidden" name="userId" value={user?.id} />
-          <SelectCalender resevation={data?.Reservation} />
-          {user?.id ? (
-            <div>
-              <ResevetionSubmiteButton />
-            </div>
-          ) : (
-            <Button className="w-full mt-8" asChild>
-              <Link href="/api/auth/login">برای رزرو کردن وارد شوید</Link>
-            </Button>
-          )}
+          <p className="my-2 text-sm text-muted-foreground font-bold">
+            روزهای کمرنگ به‌ معنای رزرو‌شده و غیرقابل انتخاب هستند.
+          </p>
+          <SelectCalender
+            resevation={data?.Reservation}
+            price={data?.price as number}
+            userId={user.id}
+          />
         </form>
       </div>
     </div>

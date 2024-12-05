@@ -1,6 +1,6 @@
 "use client";
 
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Vazirmatn } from "next/font/google";
@@ -65,12 +65,21 @@ function MapSearchComponent({ data }: { data: dataType[] }) {
                     {item.title}
                   </p>
                   <p className="text-start text-xs text-black">
-                    {item.price}{" "}
+                    {item.price?.toLocaleString("fa-IR")} تومان
                     <span className="text-muted-foreground"> هر شب</span>
                   </p>
                 </div>
               </Link>
             </Popup>
+            <Tooltip
+              interactive
+              direction="left"
+              offset={[85, 0]}
+              permanent
+              className={`font-medium ${vazirmatn.className} text-black text-xs`}
+            >
+              {item.price?.toLocaleString("fa-IR")} تومان
+            </Tooltip>
           </Marker>
         );
       })}

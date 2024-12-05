@@ -72,7 +72,9 @@ function ListingCard({
           {description}
         </p>
         <p className="mt-2 text-muted-foreground text-sm">
-          <span className="font-medium text-black text-base">{price} تومن</span>{" "}
+          <span className="font-medium text-black text-base">
+            {price.toLocaleString("Fa-ir")} تومن
+          </span>{" "}
           برای هر شب
         </p>
       </Link>

@@ -6,9 +6,15 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import highlightWeekends from "react-multi-date-picker/plugins/highlight_weekends";
+import { ResevetionSubmiteButton } from "./SubmiteButton";
+import { Button } from "./ui/button";
+import Link from "next/link";
+import { CalendarRange, CalendarRangeIcon, CreditCard } from "lucide-react";
 
 export default function SelectCalender({
   resevation,
+  price,
+  userId,
 }: {
   resevation:
     | {
@@ -16,6 +22,8 @@ export default function SelectCalender({
         endDate: Date;
       }[]
     | undefined;
+  price: number;
+  userId: string | undefined;
 }) {
   const [reserved, setReserved] = useState<string[][]>();
 
@@ -67,6 +75,21 @@ export default function SelectCalender({
   }
 
   const [values, setValues] = useState<DateObject[]>(initialValue);
+  const [days, setDays] = useState(0);
+
+  useEffect(() => {
+    if (values && values[0] && values[1]) {
+      const startDate = new Date(values[0].toDate());
+      const endDate = new Date(values[1].toDate());
+
+      // محاسبه تعداد روزها
+      const differenceInTime = endDate.getTime() - startDate.getTime();
+      const totalDays = differenceInTime / (1000 * 60 * 60 * 24); // تبدیل میلی‌ثانیه به روز
+      setDays(totalDays + 1);
+    } else {
+      setDays(0); // اگر تاریخ ناقص بود، تعداد روزها را صفر کنید
+    }
+  }, [values]);
 
   const startDate =
     values && values[0]
@@ -90,53 +113,97 @@ export default function SelectCalender({
   }
 
   return (
-    <div className="flex items-center justify-center">
-      <input type="hidden" name="startDate" value={startDate as string} />
-      <input type="hidden" name="endDate" value={endDate as string} />
-      <Calendar
-        className="red"
-        calendar={persian}
-        locale={persian_fa}
-        multiple={false}
-        minDate={Date.now()}
-        range={true}
-        value={values}
-        onChange={(ranges) => {
-          if (Array.isArray(ranges) && ranges.length === 2) {
-            const [start, end] = ranges;
+    <div>
+      <div className="flex items-center justify-center">
+        <input type="hidden" name="startDate" value={startDate as string} />
+        <input type="hidden" name="endDate" value={endDate as string} />
+        <Calendar
+          className="red"
+          calendar={persian}
+          locale={persian_fa}
+          multiple={false}
+          minDate={Date.now()}
+          range={true}
+          value={values}
+          onChange={(ranges) => {
+            if (Array.isArray(ranges) && ranges.length === 2) {
+              const [start, end] = ranges;
 
-            const isRangeReserved = isDateInRange(start.format(), end.format());
+              const isRangeReserved = isDateInRange(
+                start.format(),
+                end.format()
+              );
 
-            if (!isRangeReserved) {
-              setValues(ranges);
-            } else {
-              setValues([]);
+              if (!isRangeReserved) {
+                setValues(ranges);
+              } else {
+                setValues([]);
+              }
             }
-          }
-        }}
-        mapDays={({ date }) => {
-          let className = "";
-          const strDate = date.format();
+          }}
+          mapDays={({ date }) => {
+            let className = "";
+            const strDate = date.format();
 
-          // بررسی اینکه تاریخ در لیست رزرو شده باشد
-          if (isReserved(strDate)) className = "reserved";
+            // بررسی اینکه تاریخ در لیست رزرو شده باشد
+            if (isReserved(strDate)) className = "reserved";
 
-          return {
-            className,
-            disabled: isReserved(strDate), // غیرفعال کردن تاریخ‌های رزرو شده
-          };
-        }}
-        plugins={[
-          <DatePanel
-            key={1}
-            position={"left"}
-            sort="date"
-            eachDaysInRange={true}
-            removeButton={false}
-          />,
-          highlightWeekends(),
-        ]}
-      />
+            return {
+              className,
+              disabled: isReserved(strDate), // غیرفعال کردن تاریخ‌های رزرو شده
+            };
+          }}
+          plugins={[
+            <DatePanel
+              key={1}
+              position={"left"}
+              sort="date"
+              eachDaysInRange={true}
+              removeButton={false}
+            />,
+            highlightWeekends(),
+          ]}
+        />
+      </div>
+      <div className="mt-4">
+        <div className="flex items-center">
+          <CreditCard className="w-4 h-4 ml-2" />
+          <p>
+            {price.toLocaleString("Fa")} تومان{" "}
+            <span className="text-xs text-muted-foreground">به ازای هر شب</span>
+          </p>
+        </div>
+        <div>
+          {values.length === 0 ? (
+            <div className="text-sm flex">
+              <CalendarRange className="w-4 h-4 ml-2" />
+              <p>یک بازه زمانی برای رزو خانه انتخاب کنید</p>
+            </div>
+          ) : (
+            <div>
+              <div className="text-sm flex">
+                <CalendarRangeIcon className="w-4 h-4 ml-2" />
+                <p>{days} شب انتخاب شد</p>
+              </div>
+              <div>
+                <p>
+                  هزینه {days} شب برای این خانه{" "}
+                  {(price * days).toLocaleString("fa")} تومان میشود
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      {userId ? (
+        <div>
+          <ResevetionSubmiteButton values={values} />
+        </div>
+      ) : (
+        <Button className="w-full mt-4" asChild>
+          <Link href="/api/auth/login">برای رزرو کردن وارد شوید</Link>
+        </Button>
+      )}
     </div>
   );
 }

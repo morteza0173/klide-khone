@@ -3,6 +3,7 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "./ui/button";
 import { Heart, Loader2 } from "lucide-react";
+import { DateObject } from "react-multi-date-picker";
 
 export function SubmiteButton() {
   const { pending } = useFormStatus();
@@ -73,18 +74,27 @@ export function DeleteFromFavoriteButton() {
   );
 }
 
-export function ResevetionSubmiteButton() {
+export function ResevetionSubmiteButton({ values }: { values: DateObject[] }) {
   const { pending } = useFormStatus();
+  console.log(values.length);
 
   return (
     <>
       {pending ? (
-        <Button className="w-full mt-8" disabled>
+        <Button className="w-full mt-4" disabled>
           <Loader2 className="w-4 h-4 animate-spin ml-2" /> لطفا صبر کنید ...
         </Button>
+      ) : values.length === 0 ? (
+        <Button className="w-full mt-4" disabled>
+          یک بازه زمانی انتخاب کنید
+        </Button>
       ) : (
-        <Button className="w-full mt-8" type="submit">
-          همین حالا رزرو کنید
+        <Button
+          className="w-full mt-4"
+          type="submit"
+          disabled={values.length === 0}
+        >
+          پرداخت و رزرو
         </Button>
       )}
     </>
