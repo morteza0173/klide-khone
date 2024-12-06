@@ -14,13 +14,11 @@ import {
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
 import { createHome } from "@/app/action";
+import FormContainer from "./FormContainer";
 
 async function UserNav() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
-  const createHomeWithId = createHome.bind(null, {
-    userId: user?.id as string,
-  });
 
   return (
     <DropdownMenu dir="rtl">
@@ -42,11 +40,12 @@ async function UserNav() {
         {user ? (
           <>
             <DropdownMenuItem>
-              <form action={createHomeWithId} className="w-full">
+              <FormContainer action={createHome}>
+                <input type="hidden" name="userId" value={user.id} />
                 <button type="submit" className="w-full text-start">
                   خانه خود را اضافه کنید
                 </button>
-              </form>
+              </FormContainer>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link href="/my-homes" className="w-full">

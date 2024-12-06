@@ -169,7 +169,7 @@ export default function SelectCalender({
         <div className="flex items-center">
           <CreditCard className="w-4 h-4 ml-2" />
           <p>
-            {price.toLocaleString("Fa")} تومان{" "}
+            {price?.toLocaleString("Fa")} تومان{" "}
             <span className="text-xs text-muted-foreground">به ازای هر شب</span>
           </p>
         </div>

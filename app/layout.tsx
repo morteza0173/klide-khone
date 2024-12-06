@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-
+import { Toaster } from "sonner";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Vazirmatn } from "next/font/google";
+
 const vazirmatn = Vazirmatn({ subsets: ["arabic"] });
-
-
 
 export const metadata: Metadata = {
   title: "رزرو خونه",
@@ -20,6 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en" dir="rtl">
       <body className={`${vazirmatn.className} antialiased`}>
+        <Toaster
+          dir="rtl"
+          position="bottom-left"
+          expand={false}
+          richColors
+          closeButton
+        />
         <Navbar />
         {children}
       </body>

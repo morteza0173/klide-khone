@@ -1,5 +1,6 @@
 import { createCategoryPage } from "@/app/action";
 import CreationButtonBar from "@/components/CreationButtonBar";
+import FormContainer from "@/components/FormContainer";
 import { SelectedCategory } from "@/components/SelectedCategory";
 
 export default function StrucutreRoute({ params }: { params: { id: string } }) {
@@ -10,11 +11,11 @@ export default function StrucutreRoute({ params }: { params: { id: string } }) {
           کدوم از اینا میتونه خونه ی تو رو توصیف کنه؟
         </h2>
       </div>
-      <form action={createCategoryPage}>
+      <FormContainer action={createCategoryPage}>
         <input type="hidden" name="homeId" value={params.id} />
         <SelectedCategory />
         <CreationButtonBar />
-      </form>
+      </FormContainer>
     </>
   );
 }

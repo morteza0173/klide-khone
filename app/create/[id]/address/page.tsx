@@ -1,5 +1,6 @@
 import { createLocation } from "@/app/action";
 import CreationButtonBar from "@/components/CreationButtonBar";
+import FormContainer from "@/components/FormContainer";
 import { Skeleton } from "@/components/ui/skeleton";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
@@ -18,14 +19,14 @@ function AddressRoute({ params }: { params: { id: string } }) {
         </h2>
       </div>
 
-      <form action={createLocation}>
+      <FormContainer action={createLocation}>
         <input type="hidden" name="homeId" value={params.id} />
 
         <div className="w-[90%] lg:w-3/5 mx-auto mb-36">
           <Map />
         </div>
         <CreationButtonBar />
-      </form>
+      </FormContainer>
     </>
   );
 }

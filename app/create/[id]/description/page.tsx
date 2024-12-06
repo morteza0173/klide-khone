@@ -1,6 +1,7 @@
 import { createDescription } from "@/app/action";
 import Counter from "@/components/Counter";
 import CreationButtonBar from "@/components/CreationButtonBar";
+import FormContainer from "@/components/FormContainer";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +15,7 @@ function DescriptionPage({ params }: { params: { id: string } }) {
           لطفا مشخصات خانه را پر کنید
         </h2>
       </div>
-      <form action={createDescription}>
+      <FormContainer action={createDescription}>
         <input type="hidden" name="homeId" value={params.id} />
         <div className="mx-auto w-[90%] lg:w-3/5 mt-10 flex flex-col gap-y-5 mb-36">
           <div className="flex flex-col gap-y-2">
@@ -25,6 +26,9 @@ function DescriptionPage({ params }: { params: { id: string } }) {
               placeholder="کوتاه و مختصر ..."
               required
             />
+            <p className="text-xs text-muted-foreground">
+              موضوع باید بین 4 تا 20 حرف باشد
+            </p>
           </div>
           <div className="flex flex-col gap-y-2">
             <Label>توضیحات</Label>
@@ -34,6 +38,9 @@ function DescriptionPage({ params }: { params: { id: string } }) {
               placeholder="لطفا در مورد خونه ی خودتون بنویسید ... "
               className="h-24"
             />
+            <p className="text-xs text-muted-foreground">
+              توضیحات میتواند شامل 10 تا 1000 کلمه باشد
+            </p>
           </div>
           <div className="flex flex-col gap-y-2">
             <Label>قیمت</Label>
@@ -45,10 +52,16 @@ function DescriptionPage({ params }: { params: { id: string } }) {
               min={50000}
               step={5000}
             />
+            <p className="text-xs text-muted-foreground">
+              حداقل قیمت میتواند 50 هزار تومان باشد
+            </p>
           </div>
           <div className="flex flex-col gap-y-2">
             <Label>تصویر</Label>
             <Input name="image" required type="file" />
+            <p className="text-xs text-muted-foreground">
+              حداکثر حجم تصویر 4 مگابایت میتواند باشد
+            </p>
           </div>
           <Card>
             <CardHeader className="flex flex-col gap-y-5">
@@ -83,7 +96,7 @@ function DescriptionPage({ params }: { params: { id: string } }) {
           </Card>
         </div>
         <CreationButtonBar />
-      </form>
+      </FormContainer>
     </>
   );
 }

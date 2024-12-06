@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AddToFavoriteButton, DeleteFromFavoriteButton } from "./SubmiteButton";
 import { addToFavorite, deleteFromFavorite } from "@/app/action";
+import FormContainer from "./FormContainer";
 
 interface props {
   photo: string;
@@ -44,19 +45,19 @@ function ListingCard({
         {userId && (
           <div className="z-10 absolute top-2 left-2">
             {isInFavoriteList ? (
-              <form action={deleteFromFavorite}>
+              <FormContainer action={deleteFromFavorite}>
                 <input type="hidden" name="favoriteId" value={favoriteId} />
                 <input type="hidden" name="userId" value={userId} />
                 <input type="hidden" name="pathName" value={pathName} />
                 <DeleteFromFavoriteButton />
-              </form>
+              </FormContainer>
             ) : (
-              <form action={addToFavorite}>
+              <FormContainer action={addToFavorite}>
                 <input type="hidden" name="homeId" value={homeId} />
                 <input type="hidden" name="userId" value={userId} />
                 <input type="hidden" name="pathName" value={pathName} />
                 <AddToFavoriteButton />
-              </form>
+              </FormContainer>
             )}
           </div>
         )}
